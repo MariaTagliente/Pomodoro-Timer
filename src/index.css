@@ -1,0 +1,17 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap');
+@import "tailwindcss";
+
+@theme{
+  --font-inter: "Inter", sans-serif;
+  --Emerald: #60D394;
+  --emeraldMedium: #3FA56F;
+  --emeraldDark: #1E4F35;
+  --Coral: #EE6055;
+  --shadowEmerald: 0 8px 18px rgba(36, 94, 63, 0.9);
+}
+
+@plugin "daisyui";
+
+body{
+  background-color: var(--emeraldMedium);
+}
