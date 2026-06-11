@@ -1,15 +1,12 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { FaPlay } from "react-icons/fa";
 import { IoIosPause, IoIosPlay } from "react-icons/io";
 import { MdKeyboardArrowDown, MdKeyboardArrowUp } from "react-icons/md";
+import { ModesContext } from "../context/ModesContext";
 
 export default function Homepage(){
 
-    const modes = [
-        {name: "pomodoro", time: 25 * 60},
-        {name: "pausa breve", time: 5 * 60},
-        {name: "pausa lunga", time: 15 * 60}
-    ];
+    const {modes, setModes} = useContext(ModesContext);
 
     const [modeIndex, setModeIndex] = useState(0);
     const [countdown, setCountdown] = useState(modes[0].time);
@@ -17,6 +14,12 @@ export default function Homepage(){
     const [showTicks, setShowTicks] = useState(true);
     
     const mode = modes[modeIndex];
+
+    // AGGIORNAMENTO TIMER
+    useEffect(() => {
+        setCountdown(modes[modeIndex].time);
+    }, [modes, modeIndex]);
+
 
     // TACCHETTE
     const ticks = [];
@@ -56,6 +59,7 @@ export default function Homepage(){
         setCountdown(mode.time);
         setStatus("idle");
     };
+
 
     // CAMBIO MODALITA'
     const nextMode = ()=>{
