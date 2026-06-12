@@ -22,7 +22,7 @@ export default function SettingsPage(){
 
     // SCELTA SUONI
     const soundOptions = [
-        {key: "notification", label: "suono di notifica"},
+        {key: "notification", label: "suono notifica"},
         {key: "alarm", label: "sveglia"}
     ]
 
@@ -54,13 +54,13 @@ export default function SettingsPage(){
             <MdKeyboardArrowLeft onClick={()=>navigate(-1)} className="text-4xl fixed top-5 left-5 cursor-pointer hover:scale-125 tansition duration-500"/>
                 <section className="mt-15 p-5">
                     <article className="flex flex-col justify-center items-center gap-8 uppercase">
-                        <h2 className="text-xl opacity-70">durata</h2>
-                        <ul className="flex gap-6">
+                        <h2 className="text-lg md:text-xl opacity-70">durata</h2>
+                        <ul className="flex gap-2 md:gap-6">
                             {modes.map((mode, index)=>{
                                 return(
-                                    <li key={mode.name} onClick={()=>{setModeIndex(index); setShowPopup(true);}} className="bg-(--color-light) p-7 rounded-box shadow-xl cursor-pointer flex flex-col items-center gap-5 hover:scale-105 transition duration-300">
+                                    <li key={mode.name} onClick={()=>{setModeIndex(index); setShowPopup(true);}} className="bg-(--color-light) p-1.5 md:p-7 rounded-box shadow-xl cursor-pointer flex flex-col items-center gap-5 hover:scale-105 transition duration-300">
                                         <span className="text-5xl">{Math.floor(mode.time / 60)}</span>
-                                        <span className="text-xl font-semibold">{mode.name}</span>
+                                        <span className="text-sm md:text-xl font-semibold">{mode.name}</span>
                                     </li>
                                 )
                             })}
@@ -68,8 +68,8 @@ export default function SettingsPage(){
                     </article>
 
                     <article className="flex flex-col justify-center items-center gap-7 uppercase">
-                        <h2 className="mt-15 text-xl opacity-70">temi</h2>
-                        <ul className="bg-(--color-light) px-38 py-3 rounded-box shadow-xl grid grid-cols-4 gap-4">
+                        <h2 className="mt-15 text-lg md:text-xl opacity-70">temi</h2>
+                        <ul className="bg-(--color-light) p-3 md:px-38 md:py-3 rounded-box shadow-xl grid grid-cols-4 gap-4">
                             {themes.map((theme)=>{
                                 return(
                                     <li key={theme.id} onClick={()=>setActiveTheme(theme)} className= "w-15 h-15 rounded-box cursor-pointer hover:scale-105 transition flex justify-center items-center" style={{ backgroundColor: theme.medium}}>
@@ -83,11 +83,11 @@ export default function SettingsPage(){
                     </article>
 
                     <article className="flex flex-col justify-center items-center gap-7 uppercase">
-                        <h2 className="mt-15 text-xl opacity-70">suoni</h2>
+                        <h2 className="mt-15 text-lg md:text-xl opacity-70">suoni</h2>
                         <ul className="flex gap-6">
                             {soundOptions.map((sound)=>{
                                 return(
-                                    <li key={sound.key} onClick={()=>toggleSound(sound.key)} className="bg-(--color-light) w-70 py-3 rounded-box shadow-xl cursor-pointer flex flex-col items-center gap-3 hover:scale-105 transition duration-300">
+                                    <li key={sound.key} onClick={()=>toggleSound(sound.key)} className="bg-(--color-light) w-35 md:w-70 py-3 rounded-box shadow-xl cursor-pointer flex flex-col items-center gap-3 hover:scale-105 transition duration-300">
                                         <span className={`${soundMode === sound.key ? "bg-white" : "bg-white/60"} rounded-full p-2`}>
                                            {soundMode === sound.key ? (
                                             <FaCheck className="text-5xl text-(--color-light)"/>
@@ -96,7 +96,7 @@ export default function SettingsPage(){
                                            )}                           
                                         </span>
                                         
-                                        <p className="text-xl font-semibold"> {sound.label} </p>
+                                        <p className="text-center text-xl font-semibold"> {sound.label} </p>
                                     </li>
                                 )
                             })}

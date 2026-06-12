@@ -49,7 +49,7 @@ export default function Homepage(){
     }, [status]);
 
 
-    // SOUNDS
+    // 
     useEffect(() => {
         if (countdown !== 0) return;
         setStatus("paused");
@@ -119,7 +119,7 @@ export default function Homepage(){
           <main className="h-[90vh] flex justify-center items-center">
             <section>
                 <article className="flex flex-col items-center">
-                    <div style={{ boxShadow: "var(--color-shadow)"}} className="relative size-100 bg-(--color-light) rounded-xl flex flex-col justify-center items-center">
+                    <div style={{ boxShadow: "var(--color-shadow)"}} className="relative size-70 md:size-100 bg-(--color-light) rounded-xl flex flex-col justify-center items-center">
                         {ticks.map((tick)=>{
                             const angle = (360 / ticks.length) * tick;
                             // 360 / 5 = 72 tick = 0 -> 72 * 0 = 0°
@@ -128,16 +128,16 @@ export default function Homepage(){
                             )
                         })}
                         
-                        <div onClick={handleClick} className="size-60 ring-8 ring-white rounded-full flex justify-center items-center cursor-pointer">
+                        <div onClick={handleClick} className="size-50 md:size-60 ring-6 md:ring-8 ring-white rounded-full flex justify-center items-center cursor-pointer">
                             
                             {/* IDLE */}
                             {status === "idle" && (
-                                <IoIosPlay color="white" className="size-35 hover:scale-110 tansition duration-500"/>
+                                <IoIosPlay color="white" className="size-28 md:size-35 hover:scale-110 tansition duration-500"/>
                             )}
                             
                             {/* RUNNING */}
                             {status === "running" && (
-                                <span className="text-white text-7xl">
+                                <span className="text-white text-6xl md:text-7xl">
                                     {minutes}:{seconds.toString().padStart(2, "0")}
                                 </span>
                             )}
@@ -150,7 +150,7 @@ export default function Homepage(){
                                    </span>
                                    
                                    <div className="absolute">
-                                    <IoIosPause color="white" className="size-35 hover:scale-110 tansition duration-500"/>
+                                    <IoIosPause color="white" className="size-28 md:size-35 hover:scale-110 tansition duration-500"/>
                                    </div>
                                 </>
                             )}
@@ -159,7 +159,7 @@ export default function Homepage(){
                     
 
                     {/* MODE */}
-                    <div className="mt-10 flex items-center gap-2 text-xl font-semibold uppercase">
+                    <div className="mt-15 md:mt-10 flex items-center gap-2 text-xl font-semibold uppercase">
                        <div className="flex flex-col items-center leading-none -space-y-3 text-(--color-dark)">
                         <MdKeyboardArrowUp onClick={nextMode} size={25} className="cursor-pointer"/>
                         <MdKeyboardArrowDown onClick={prevMode} size={25} className="cursor-pointer"/>
@@ -170,7 +170,7 @@ export default function Homepage(){
                     </div>
 
                     {status === "paused" && (                             
-                        <button onClick={resetTimer} className="mt-3 cursor-pointer text-white uppercase text-lg opacity-70 hover:opacity-100 transition">
+                        <button onClick={resetTimer} className="mt-15  md:mt-3 cursor-pointer text-white uppercase text-lg opacity-70 hover:opacity-100 transition">
                             reset
                         </button>                            
                     )}
