@@ -12,30 +12,26 @@ export default function SettingsPage(){
 
     const navigate = useNavigate();
 
-    const {modes, setModes} = useContext(ModesContext);
-
-    // const [modes, setModes] = useState([
-    //     {name: "pomodoro", time: 25 * 60},
-    //     {name: "pausa breve", time: 5 * 60},
-    //     {name: "pausa lunga", time: 15 * 60}
-    // ]); 
-
-    const themes = [
-        {id: 1, name: "Coral", background: "#EE6055"},
-        {id: 2, name: "LightGreen", background: "#AAF683"},
-        {id: 3, name: "Skyblue", background: "#17bebb"},
-        {id: 4, name: "Purple", background: "#5B436F"},
-        {id: 5, name: "GreyDark", background: "#8d714c"},
-        {id: 6, name: "Emerald", background: "#60D394"},           
-        {id: 7, name: "Blue", background: "#385c75"},
-        {id: 8, name: "GreyDark", background: "#4a4b4e"}, 
-    ];
+    const {modes, setModes, themes, activeTheme, setActiveTheme, soundMode, setSoundMode} = useContext(ModesContext); 
 
     const [showPopup, setShowPopup] = useState(false);
     const [modeIndex, setModeIndex] = useState(0);
 
     const mode = modes[modeIndex];
 
+
+    // SCELTA SUONI
+    const soundOptions = [
+        {key: "notification", label: "suono di notifica"},
+        {key: "alarm", label: "sveglia"}
+    ]
+
+    const toggleSound = (key)=>{
+        setSoundMode(key);
+    }
+
+
+    // SCELTA DURATA
     const incrementTime = ()=>{
         const newModes = [...modes];
 
@@ -62,7 +58,7 @@ export default function SettingsPage(){
                         <ul className="flex gap-6">
                             {modes.map((mode, index)=>{
                                 return(
-                                    <li key={mode.name} onClick={()=>{setModeIndex(index); setShowPopup(true);}} className="bg-(--Emerald)/40 p-7 rounded-box shadow-xl cursor-pointer flex flex-col items-center gap-5 hover:scale-105 transition duration-300">
+                                    <li key={mode.name} onClick={()=>{setModeIndex(index); setShowPopup(true);}} className="bg-(--color-light) p-7 rounded-box shadow-xl cursor-pointer flex flex-col items-center gap-5 hover:scale-105 transition duration-300">
                                         <span className="text-5xl">{Math.floor(mode.time / 60)}</span>
                                         <span className="text-xl font-semibold">{mode.name}</span>
                                     </li>
@@ -73,10 +69,14 @@ export default function SettingsPage(){
 
                     <article className="flex flex-col justify-center items-center gap-7 uppercase">
                         <h2 className="mt-15 text-xl opacity-70">temi</h2>
-                        <ul className="bg-(--Emerald)/40 px-38 py-3 rounded-box shadow-xl grid grid-cols-4 gap-4">
+                        <ul className="bg-(--color-light) px-38 py-3 rounded-box shadow-xl grid grid-cols-4 gap-4">
                             {themes.map((theme)=>{
                                 return(
-                                    <li key={theme.id} style={{ backgroundColor: theme.background }} className="w-15 h-15 rounded-box cursor-pointer hover:scale-105 transition"></li>
+                                    <li key={theme.id} onClick={()=>setActiveTheme(theme)} className= "w-15 h-15 rounded-box cursor-pointer hover:scale-105 transition flex justify-center items-center" style={{ backgroundColor: theme.medium}}>
+                                        {activeTheme.id === theme.id && (
+                                          <FaCheck className="text-4xl bg-white rounded-full p-1.5" style={{color: activeTheme.medium}}/>  
+                                        )}
+                                    </li>
                                 )
                             })}
                         </ul>
@@ -85,35 +85,35 @@ export default function SettingsPage(){
                     <article className="flex flex-col justify-center items-center gap-7 uppercase">
                         <h2 className="mt-15 text-xl opacity-70">suoni</h2>
                         <ul className="flex gap-6">
-                            <li className="bg-(--Emerald)/40 w-70 py-3 rounded-box shadow-xl cursor-pointer flex flex-col items-center gap-3 hover:scale-105 transition duration-300">
-                                <span className="bg-white/60 rounded-full p-2">
-                                    <IoClose className="text-5xl text-(--Emerald)"/>
-                                </span>
-                                
-                                <p className="text-xl font-semibold">suono di notifica</p>
-                            </li>
-
-                            <li className="bg-(--Emerald)/40 w-70 py-3 rounded-box shadow-xl cursor-pointer flex flex-col items-center gap-3 hover:scale-105 transition duration-300">
-                                <span className="bg-white/60 rounded-full p-2">
-                                    <FaCheck className="text-5xl text-(--Emerald)"/>
-                                </span>
-                                
-                                <p className="text-xl font-semibold">sveglia</p>
-                            </li>
+                            {soundOptions.map((sound)=>{
+                                return(
+                                    <li key={sound.key} onClick={()=>toggleSound(sound.key)} className="bg-(--color-light) w-70 py-3 rounded-box shadow-xl cursor-pointer flex flex-col items-center gap-3 hover:scale-105 transition duration-300">
+                                        <span className={`${soundMode === sound.key ? "bg-white" : "bg-white/60"} rounded-full p-2`}>
+                                           {soundMode === sound.key ? (
+                                            <FaCheck className="text-5xl text-(--color-light)"/>
+                                           ) : (
+                                            <IoClose className="text-5xl text-(--color-light)"/>
+                                           )}                           
+                                        </span>
+                                        
+                                        <p className="text-xl font-semibold"> {sound.label} </p>
+                                    </li>
+                                )
+                            })}
                         </ul>
                     </article>
 
                     {showPopup && (
-                        <div className="fixed inset-0 bg-(--emeraldDark)/75 gap-8 flex flex-col justify-center items-center">
+                        <div className="fixed inset-0 bg-(--color-dark)/75 gap-8 flex flex-col justify-center items-center">
                             <p className="text-xl font-semibold uppercase">{mode.name}</p>
                             <div className="flex items-center gap-6">
-                                <IoMdRemove onClick={decrementTime} size={60} className="text-(--emeraldDark) bg-white rounded-full p-2 cursor-pointer"/>
+                                <IoMdRemove onClick={decrementTime} size={60} className="text-(--color-dark) bg-white rounded-full p-2 cursor-pointer hover:scale-110 transition"/>
                                 <h3 className="text-9xl">{Math.floor(mode.time / 60)}</h3>
-                                <IoMdAdd onClick={incrementTime} size={60} className="text-(--emeraldDark) bg-white rounded-full p-2 cursor-pointer"/>
+                                <IoMdAdd onClick={incrementTime} size={60} className="text-(--color-dark) bg-white rounded-full p-2 cursor-pointer hover:scale-110 transition"/>
                             </div>
 
-                            <span className="bg-white rounded-full p-2">
-                                <FaCheck onClick={()=>setShowPopup(false)} size={40} className="text-(--emeraldDark) cursor-pointer"/>
+                            <span className="bg-white rounded-full p-3 hover:bg-(--color-light) text-(--color-dark) hover:text-white cursor-pointer">
+                                <FaCheck onClick={()=>setShowPopup(false)} size={40}/>
                             </span>
                         </div>
                     )}

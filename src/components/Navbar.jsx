@@ -12,7 +12,7 @@ export default function Navbar(){
             
             <div className="flex-none mr-5">
                 <Link to={'/settings'}>
-                    <CgMenu size={28} className="text-(--emeraldDark) hover:text-white" />
+                    <CgMenu size={28} className="text-(--color-dark) hover:text-white" />
                 </Link>
             </div>
            </div>

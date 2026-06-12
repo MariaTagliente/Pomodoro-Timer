@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import { FaPlay } from "react-icons/fa";
 import { IoIosPause, IoIosPlay } from "react-icons/io";
 import { MdKeyboardArrowDown, MdKeyboardArrowUp } from "react-icons/md";
@@ -6,18 +6,22 @@ import { ModesContext } from "../context/ModesContext";
 
 export default function Homepage(){
 
-    const {modes, setModes} = useContext(ModesContext);
+    const {modes, setModes, themes, activeTheme, setActiveTheme, soundMode, setSoundMode} = useContext(ModesContext);
 
     const [modeIndex, setModeIndex] = useState(0);
     const [countdown, setCountdown] = useState(modes[0].time);
     const [status, setStatus] = useState("idle");
     const [showTicks, setShowTicks] = useState(true);
+
+    const notificationSound = useRef(new Audio("/sounds/notification.mp3"));
+    const alarmSound = useRef(new Audio("/sounds/alarm.mp3"))
     
     const mode = modes[modeIndex];
 
     // AGGIORNAMENTO TIMER
     useEffect(() => {
         setCountdown(modes[modeIndex].time);
+        setStatus("idle");
     }, [modes, modeIndex]);
 
 
@@ -31,10 +35,10 @@ export default function Homepage(){
     useEffect(()=>{
         const interval = setInterval(()=>{
             if (status !== "running") return;
+            
             setCountdown((prev)=>{
                 // evita che il countdown vada al di sotto di 0
-                if(prev <= 0){
-                    setStatus("paused");
+                if(prev <= 1){
                     return 0; 
                 }
                 return prev -1;
@@ -43,6 +47,20 @@ export default function Homepage(){
 
         return()=>clearInterval(interval);
     }, [status]);
+
+
+    useEffect(() => {
+        if (countdown !== 0) return;
+        setStatus("paused");
+
+        if (soundMode === "notification") {
+            notificationSound.current.play();
+        }
+
+        if (soundMode === "alarm") {
+            alarmSound.current.play();
+        }
+    }, [countdown, soundMode]);
 
 
     const handleClick = ()=>{
@@ -58,6 +76,9 @@ export default function Homepage(){
     const resetTimer = ()=>{
         setCountdown(mode.time);
         setStatus("idle");
+
+        notificationSound.current.pause();
+        alarmSound.current.pause();
     };
 
 
@@ -97,7 +118,7 @@ export default function Homepage(){
           <main className="h-[90vh] flex justify-center items-center">
             <section>
                 <article className="flex flex-col items-center">
-                    <div className="relative size-100 bg-(--Emerald) rounded-xl shadow-(--shadowEmerald) flex flex-col justify-center items-center">
+                    <div style={{ boxShadow: "var(--color-shadow)"}} className="relative size-100 bg-(--color-light) rounded-xl flex flex-col justify-center items-center">
                         {ticks.map((tick)=>{
                             const angle = (360 / ticks.length) * tick;
                             // 360 / 5 = 72 tick = 0 -> 72 * 0 = 0°
@@ -138,17 +159,17 @@ export default function Homepage(){
 
                     {/* MODE */}
                     <div className="mt-10 flex items-center gap-2 text-xl font-semibold uppercase">
-                       <div className="flex flex-col items-center leading-none -space-y-3 text-(--emeraldDark)">
+                       <div className="flex flex-col items-center leading-none -space-y-3 text-(--color-dark)">
                         <MdKeyboardArrowUp onClick={nextMode} size={25} className="cursor-pointer"/>
                         <MdKeyboardArrowDown onClick={prevMode} size={25} className="cursor-pointer"/>
                        </div>
                        
                         <h2 className="text-white"> {mode.name} </h2>
-                        <p className="text-(--emeraldDark)"> {Math.floor(mode.time / 60)} min</p>
+                        <p className="text-(--color-dark)"> {Math.floor(mode.time / 60)} min</p>
                     </div>
 
                     {status === "paused" && (                             
-                        <button onClick={resetTimer} className="mt-3 cursor-pointer text-white uppercase text-lg opacity-70 hover:opacity-100 transitio">
+                        <button onClick={resetTimer} className="mt-3 cursor-pointer text-white uppercase text-lg opacity-70 hover:opacity-100 transition">
                             reset
                         </button>                            
                     )}
