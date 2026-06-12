@@ -49,6 +49,7 @@ export default function Homepage(){
     }, [status]);
 
 
+    // SOUNDS
     useEffect(() => {
         if (countdown !== 0) return;
         setStatus("paused");
